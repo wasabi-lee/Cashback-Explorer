@@ -11,3 +11,5 @@ __2. ExplorerScreen (MainActivity)__
 
 ![alt text](https://github.com/wasabi-lee/Cashback-Explorer/blob/master/screenshots/resized_2.png?raw=true)
 
+![alt text](https://github.com/wasabi-lee/Cashback-Explorer/blob/master/screenshots/resized_1.png?raw=true)
+

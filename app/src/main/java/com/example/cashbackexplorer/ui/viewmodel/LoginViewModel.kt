@@ -70,6 +70,7 @@ class LoginViewModel @Inject constructor(val app: Application, val repo: Network
 
     override fun onError(throwable: Throwable?) {
         throwable?.printStackTrace()
+        loading.set(false)
         toastText.value = throwable?.message
     }
 

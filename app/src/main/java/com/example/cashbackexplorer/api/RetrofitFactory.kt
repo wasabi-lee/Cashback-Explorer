@@ -6,6 +6,7 @@ import dagger.Provides
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.NullPointerException
@@ -17,16 +18,25 @@ import javax.inject.Singleton
 
 class RetrofitFactory @Inject constructor(){
 
+
+    fun getLoggingInterceptor(): HttpLoggingInterceptor {
+        val logging = HttpLoggingInterceptor()
+        logging.level = HttpLoggingInterceptor.Level.BODY
+        return logging
+    }
+
     fun createOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .connectTimeout(60, TimeUnit.SECONDS)
+            .addInterceptor(getLoggingInterceptor())
             .build()
     }
 
 
     fun createOkHttpClientWithAuthHeader(authToken: String): OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor(getLoggingInterceptor())
             .addInterceptor { chain: Interceptor.Chain ->
                 val request: Request = chain.request()
                     .newBuilder()

@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">CashbackExplorer</string>
+    <string name="google_maps_key">AIzaSyBRpAWYIOORDUohG9PgXI8IDjOfxgXl9fE</string>
+
+
+    <!-- PREFERENCE KEYS -->
+    <string name="pref_open_key">pref_open_key</string>
+    <string name="pref_auth_key">pref_auth_key</string>
+    <string name="pref_name_key">pref_name_key</string>
+    <string name="pref_email_key">pref_email_key</string>
+
+
+    <!-- Text -->
+    <string name="login_hint_email">Email</string>
+    <string name="login_hint_name">Name</string>
+    <string name="login_sign_in">Sign In</string>
+    <string name="login_sign_up">Sign Up</string>
+    <string name="login_loading">Loading…</string>
+    <string name="cashback">Cashback: </string>
+    <string name="city">City: </string>
+    <string name="created_by">Created by: </string>
+    <string name="add">ADD</string>
+</resources>

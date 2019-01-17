@@ -29,13 +29,21 @@ class SharedPrefHelper @Inject constructor(val sharedPref: SharedPreferences,
 
 
 
-    /** Saves AuthToken in SharedPreferences and returns true if the it was successfully saved
-     * @param authToken Authentication token to save
-     * @return True if the operation was successful, false otherwise
-      */
     fun saveAuthToken(authToken: String): Boolean {
         val editor = sharedPref.edit()
         editor.putString(authKey, authToken)
+        return editor.commit()
+    }
+
+    fun saveUsername(name: String): Boolean {
+        val editor = sharedPref.edit()
+        editor.putString(nameKey, name)
+        return editor.commit()
+    }
+
+    fun saveEmail(email: String): Boolean {
+        val editor = sharedPref.edit()
+        editor.putString(emailKey, email)
         return editor.commit()
     }
 

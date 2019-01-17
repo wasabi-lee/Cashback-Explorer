@@ -52,7 +52,11 @@ class LoginViewModel @Inject constructor(val app: Application, val repo: Network
 
     override fun onSuccessful(authToken: String) {
         // Preserving token
-        Log.d(TAG, "$authToken \n Saved?: ${sharedPrefHelper.saveAuthToken(authToken)}")
+        sharedPrefHelper.saveAuthToken(authToken)
+
+        // At this point name and email are guaranteed to be non null
+        sharedPrefHelper.saveUsername(name.get()!!)
+        sharedPrefHelper.saveEmail(email.get()!!)
 
         // Taking down progress bar
         loading.set(false)

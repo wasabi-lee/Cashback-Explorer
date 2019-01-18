@@ -16,7 +16,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 
-class RetrofitFactory @Inject constructor(){
+class RetrofitFactory @Inject constructor() {
 
 
     fun getLoggingInterceptor(): HttpLoggingInterceptor {
@@ -56,7 +56,6 @@ class RetrofitFactory @Inject constructor(){
             .client(createOkHttpClient())
             .build()
     }
-
 
 
     fun createAuthRetrofit(authToken: String): Retrofit {

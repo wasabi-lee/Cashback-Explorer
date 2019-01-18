@@ -27,7 +27,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="8dp"
                 android:inputType="textPersonName"
-                android:focusable="@{viewmodel.loading ? false : true}"
                 android:layout_marginTop="32dp"
                 app:layout_constraintTop_toBottomOf="@id/login_main_text"
                 android:id="@+id/login_name_edit"
@@ -41,7 +40,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp"
                 android:inputType="textEmailAddress"
-                android:focusable="@{viewmodel.loading ? false : true}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/login_name_edit"
                 android:layout_marginStart="8dp"
@@ -64,17 +62,6 @@
                 android:onClick="@{() -> viewmodel.proceedSignUp()}"/>
 
 
-        <ProgressBar
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:indeterminate="true"
-                android:id="@+id/progressBar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-                android:visibility="@{viewmodel.loading ? View.VISIBLE : View.GONE}"/>
-
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -88,6 +75,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="72dp"
                 app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/black"
+                android:alpha="0.5"
+                android:visibility="@{viewmodel.loading ? View.VISIBLE : View.GONE}"/>
+
+        <ProgressBar
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:id="@+id/progressBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                android:visibility="@{viewmodel.loading ? View.VISIBLE : View.GONE}"/>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

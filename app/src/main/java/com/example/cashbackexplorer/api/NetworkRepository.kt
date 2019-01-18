@@ -20,27 +20,31 @@ class NetworkRepository @Inject constructor(val retrofitFactory: RetrofitFactory
             .addNewUser(User(name, email))
             .enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                    when {
+                    var errorType: ResponseValidator.ErrorType? = null
+                    errorType = when {
                         response.isSuccessful -> {
                             val token = response.headers().get("token")
                             if (token == null) {
-                                callback.onError(Throwable("Authentication error"))
-                                return
+                                ResponseValidator.identifyErrorType(response)
+                            } else {
+                                callback.onSuccessful(token)
+                                ResponseValidator.VALID_RESPONSE
                             }
-                            callback.onSuccessful(token)
                         }
-                        response.code() == 401 -> callback.onError(Throwable("Unauthorized"))
-                        else -> callback.onError(Throwable("Unexpected error"))
+                        response.code() == 401 -> ResponseValidator.ErrorType.AUTHORIZATION_ERROR
+                        else ->
+                            ResponseValidator.identifyErrorType(response)
                     }
+                    if (errorType != ResponseValidator.VALID_RESPONSE)
+                        callback.onError(errorType)
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     t.printStackTrace()
-                    callback.onError(Throwable("Unexpected Error"))
+                    callback.onError(ResponseValidator.ErrorType.UNKNOWN_ERROR)
                 }
             })
     }
-
 
     @SuppressLint("CheckResult")
     fun requestVenues(authToken: String, city: String, callback: NetworkCallback.OnReceiveVenuesCallback) {

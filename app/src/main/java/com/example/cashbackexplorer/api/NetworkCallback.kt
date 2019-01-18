@@ -7,7 +7,7 @@ interface NetworkCallback {
 
     interface SignUpCallback {
         fun onSuccessful(authToken: String)
-        fun onError(throwable: Throwable?)
+        fun onError(errorType: ResponseValidator.ErrorType)
     }
 
     interface OnReceiveVenuesCallback {

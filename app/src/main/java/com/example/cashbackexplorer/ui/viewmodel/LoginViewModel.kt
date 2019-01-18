@@ -2,19 +2,19 @@ package com.example.cashbackexplorer.ui.viewmodel
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.MutableLiveData
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import android.util.Log
 import com.example.cashbackexplorer.api.NetworkCallback
 import com.example.cashbackexplorer.api.NetworkRepository
+import com.example.cashbackexplorer.api.ResponseValidator
 import com.example.cashbackexplorer.utils.SharedPrefHelper
 import com.example.cashbackexplorer.utils.SingleLiveEvent
 import javax.inject.Inject
 
-class LoginViewModel @Inject constructor(val app: Application, val repo: NetworkRepository,
-                                         val sharedPrefHelper: SharedPrefHelper)
-    : AndroidViewModel(app), NetworkCallback.SignUpCallback {
+class LoginViewModel @Inject constructor(
+    val app: Application, val repo: NetworkRepository,
+    val sharedPrefHelper: SharedPrefHelper
+) : AndroidViewModel(app), NetworkCallback.SignUpCallback {
 
     private val TAG = LoginViewModel::class.java.simpleName
 
@@ -60,6 +60,7 @@ class LoginViewModel @Inject constructor(val app: Application, val repo: Network
 
         // Taking down progress bar
         loading.set(false)
+        loading.notifyChange()
 
         // Toast message
         toastText.value = "Welcome!"
@@ -68,10 +69,18 @@ class LoginViewModel @Inject constructor(val app: Application, val repo: Network
         toMainActivity.value = null
     }
 
-    override fun onError(throwable: Throwable?) {
-        throwable?.printStackTrace()
+    override fun onError(errorType: ResponseValidator.ErrorType) {
+        when (errorType) {
+            ResponseValidator.ErrorType.INVALID_NAME -> nameError.value = "Invalid name"
+            ResponseValidator.ErrorType.INVALID_EMAIL -> emailError.value = "Invalid email"
+            ResponseValidator.ErrorType.AUTHORIZATION_ERROR ->
+                toastText.value = "Authentication failed"
+            ResponseValidator.ErrorType.UNKNOWN_ERROR -> toastText.value =
+                    "Unknown error occurred. Please try agian later!"
+        }
+
         loading.set(false)
-        toastText.value = throwable?.message
+        loading.notifyChange()
     }
 
 

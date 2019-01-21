@@ -28,4 +28,9 @@ __2. If the emulator doesn't show the map try the following after checking the i
  
  * Option 2: Create an emulator and change Emulated Performace -> Graphics setting into __Hardware - GLES 2.0__ 
  
+ * Option 3: Try disabling hardware acceleration: Add the following attribute to the <application> tag of the AndroidManifest.xml
+ ```xml
+ <application android:hardwareAccelerated="false" ...>
+ ```
+ 
  * Fast & easy way: Use a real device 

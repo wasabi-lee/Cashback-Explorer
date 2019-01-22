@@ -4,7 +4,6 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import android.util.Log
 import com.example.cashbackexplorer.api.NetworkCallback
 import com.example.cashbackexplorer.api.NetworkRepository
 import com.example.cashbackexplorer.model.Venue
@@ -35,7 +34,8 @@ NetworkCallback.RefreshCallback{
 
     fun requestVenues() {
         if (sharedPrefHelper.getAuthToken().isNullOrEmpty()) {
-            // refresh!
+            // Auth token doesn't exist! Make user login again
+            toLoginActivity.value = null
         } else {
             repo.requestVenues(sharedPrefHelper.getAuthToken()!!, "New York", this)
         }
@@ -60,20 +60,19 @@ NetworkCallback.RefreshCallback{
             return
         }
 
-        toastText.value = "Session expired. Please try again later"
-
         repo.refreshToken(token,name, email, this)
     }
 
 
     override fun onVenueCallbackError(throwable: Throwable?) {
         throwable?.printStackTrace()
-        toastText.value = throwable?.message    }
-
+        toastText.value = throwable?.message
+    }
 
 
     override fun onRefreshed(newToken: String) {
         sharedPrefHelper.saveAuthToken(newToken)
+        repo.requestVenues(sharedPrefHelper.getAuthToken()!!, "New York", this)
     }
 
 
@@ -84,8 +83,6 @@ NetworkCallback.RefreshCallback{
         // invoking login activity
         toLoginActivity.value = null
     }
-
-
 
 
     // Display the selected marker detail to the UI

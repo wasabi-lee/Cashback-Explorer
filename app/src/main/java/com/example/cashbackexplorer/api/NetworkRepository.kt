@@ -22,6 +22,8 @@ class NetworkRepository @Inject constructor(val retrofitFactory: RetrofitFactory
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     var errorType: ResponseValidator.ErrorType? = null
                     errorType = when {
+
+                        // The request was successful
                         response.isSuccessful -> {
                             val token = response.headers().get("token")
                             if (token == null) {
@@ -31,12 +33,19 @@ class NetworkRepository @Inject constructor(val retrofitFactory: RetrofitFactory
                                 ResponseValidator.VALID_RESPONSE
                             }
                         }
+
+                        // Unauthorized token
                         response.code() == 401 -> ResponseValidator.ErrorType.AUTHORIZATION_ERROR
-                        else ->
-                            ResponseValidator.identifyErrorType(response)
+
+                        // Unknown. Identify error type!
+                        else -> ResponseValidator.identifyErrorType(response)
+
                     }
+
+                    // Send error if the response wasn't valid
                     if (errorType != ResponseValidator.VALID_RESPONSE)
                         callback.onError(errorType)
+
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -59,7 +68,7 @@ class NetworkRepository @Inject constructor(val retrofitFactory: RetrofitFactory
                         if (response.body() == null || response.body()?.venues.isNullOrEmpty()) {
                             callback.onVenueCallbackError(Throwable("No venues found"))
                         } else {
-                            callback.onReceiveVenues(response.body()!!.venues)
+                            callback.onReceiveVenues(response.body()?.venues!!)
                         }
                     } else if (response.code() == 401) {
                         // Refresh Token
@@ -75,7 +84,7 @@ class NetworkRepository @Inject constructor(val retrofitFactory: RetrofitFactory
         retrofitFactory.createAuthRetrofit(authToken)
             .create(ApiService::class.java)
             .refreshToken(User(name, email))
-            .enqueue(object: Callback<ResponseBody> {
+            .enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     when {
                         response.isSuccessful -> {

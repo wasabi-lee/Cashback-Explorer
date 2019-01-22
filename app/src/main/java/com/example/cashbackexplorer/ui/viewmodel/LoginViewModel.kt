@@ -71,8 +71,10 @@ class LoginViewModel @Inject constructor(
 
     override fun onError(errorType: ResponseValidator.ErrorType) {
         when (errorType) {
-            ResponseValidator.ErrorType.INVALID_NAME -> nameError.value = "Invalid name"
-            ResponseValidator.ErrorType.INVALID_EMAIL -> emailError.value = "Invalid email"
+            ResponseValidator.ErrorType.INVALID_NAME ->
+                nameError.value = "Invalid name"
+            ResponseValidator.ErrorType.INVALID_EMAIL ->
+                emailError.value = "Invalid email"
             ResponseValidator.ErrorType.AUTHORIZATION_ERROR ->
                 toastText.value = "Authentication failed"
             ResponseValidator.ErrorType.UNKNOWN_ERROR -> toastText.value =
